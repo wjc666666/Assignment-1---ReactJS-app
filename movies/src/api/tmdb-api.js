@@ -84,3 +84,19 @@ export const getMovie = (args) => {
       throw error
    });
   };
+  const API_KEY = 'b26b92fafbacfa5dd2f2709bd1bd4386'; 
+const BASE_URL = 'https://api.themoviedb.org/3';
+
+export const fetchUpcomingMovies = async (page = 1) => {
+  try {
+    const response = await fetch(`${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=en-US&page=${page}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch upcoming movies');
+    }
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
