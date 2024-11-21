@@ -100,3 +100,19 @@ export const fetchUpcomingMovies = async (page = 1) => {
     return [];
   }
 };
+
+export const fetchTrendingMovies = async (timeWindow = 'day') => {
+  try{
+    const response = await fetch(
+      `${BASE_URL}/trending/movie/${timeWindow}?api_key=${API_KEY}`
+    );
+    if(!response.ok){
+      throw new Error('Failed to catch');
+    }
+    const data = await response.json();
+    return data.results;
+  } catch(error){
+    console.error(error);
+    return[];
+  }
+}

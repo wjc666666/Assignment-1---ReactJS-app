@@ -1,4 +1,4 @@
-# Assignment 1 - ReactJS app.
+# Assassin 1 - ReactJS app.
 
 Name: Juncheng Wang
 
