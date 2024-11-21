@@ -14,7 +14,7 @@ const TrendingMovies = () => {
         getTrendingMovies();
     }, [timeWindow]);
 
-    eturn (
+    return (
         <div>
           <h2>Trending Movies</h2>
           <div>
