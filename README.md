@@ -12,9 +12,9 @@ This repository contains the TMDB Client, a dynamic ReactJS application that all
 
 + Trending Movies: A dynamic route (/trending) that displays the most popular or trending movies.
 + Popular Movies: A new dynamic route (/popular) that lists the most popular movies worldwide, updated weekly.
-+ Feature 3
-+ etc
-+ etc
++ Show More Reviews: On the movie review page, users can click "More" to view all reviews for a movie.
++ Movie Details: Detailed information for a specific movie is available on /movies/:id
++ Movie Recommendations: A new feature that displays recommended movies based on the currently selected movie at /movies/:id/recommendations.
 
 ## Setup requirements.
 
@@ -30,18 +30,17 @@ npm start
 The app will be available on http://localhost:3000.
 ## API endpoints.
 
-[ List the __additional__ TMDB endpoints used, giving the description and pathname for each one.] 
+Below is a list of the TMDB endpoints used in this application:
 
-e.g.
-+ Discover list of movies - discover/movie
-+ Movie details - movie/:id
-+ Movie genres = /genre/movie/list
-+ Discover list of movies - GET /trending/movie/week – Fetches the most popular/trending movies of the week.
++ Discover list of movies - GET /discover/movie
++ Movie details - GET /movie/:id
++ Movie genres - /GET /genre/movie/list
++ Trending Movies-GET /trending/movie/week – Fetches the most popular/trending movies of the week
++ Movie Reviews-GET /movie/:id/reviews – Fetches all reviews for a movie
++ Movie Recommendations-GET /movie/:id/recommendations – Fetches recommended movies based on a selected movie
 
 ## Routing.
-
-[ List the __new routes__ supported by your app and state the associated page.]
-
+The following routes are supported in the application:
 + /blogs - displays all published blogs.
 + /blogs/:id - displays a particular blog.
 + /blogs/:id/comments - detail view of a particular blog and its comments.
@@ -52,9 +51,10 @@ e.g.
 + /reviews/:id – Displays movie details along with any reviews for that particular movie.
 + /upcoming – Displays upcoming movies scheduled for release.
 + /trending – Displays the trending movies for the current week.
++ /movies/:id/recommendations – Displays a list of recommended movies for the current movie.
 
 Protected Routes:
-There are no specific authentication requirements for this app; all routes are accessible to the public.
+This app does not include authentication; all routes are accessible to the public.(Several new features are integrated e.g. pagination, third-party authentication with Firebase, or similar may add to it)
 
 ## Independent learning (If relevant).
 
@@ -63,12 +63,12 @@ During the development of this project, I researched and implemented the followi
 1.React Router v6:
 
 + Implemented dynamic routing and nested routes for pages like /movies/:id and /reviews/:id.
++ Implemented programmatic navigation and use of Link components for seamless transitions.
 
 
-2.aterial UI for Responsive Design:
+2.Material UI for Responsive Design:
 
-+ Utilized Material UI’s useMediaQuery hook for mobile-first responsive layouts.
-
++ Leveraged Material UI’s useMediaQuery hook to design responsive layouts, ensuring mobile-first design principles.
 
 3.React Query for Efficient Data Fetching:
 
@@ -78,3 +78,7 @@ During the development of this project, I researched and implemented the followi
 4.Error Handling and Retry Logic:
 
 + Implemented error boundaries and retry logic for API requests, especially for fetching movie details and popular/trending data.
+
+5.Recommendations and Reviews Feature:
+
++ Researched TMDB API’s recommendations and reviews endpoints to display movie recommendations and all reviews dynamically.
