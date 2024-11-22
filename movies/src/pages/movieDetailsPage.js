@@ -43,6 +43,18 @@ const MoviePage = () => {
                   View Recommendations
                 </button>
               </Link>
+              <Link to={`/movie/${movie.id}/credits`}>
+                <button
+                 style={{
+                  backgroundColor: "#007BFF",
+                  color: "white",
+                  border: "none",
+                  padding: "10px 15px",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+                >View Credits</button>
+              </Link>
             </div>
           </PageTemplate>
         </>

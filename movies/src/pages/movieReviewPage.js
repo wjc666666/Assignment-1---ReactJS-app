@@ -29,7 +29,16 @@ const MovieReviewPage = (props) => {
       {!showAll ? (
         <>
       <MovieReview review={review} />
-      <button onClick ={() => setShowAll(true)}>More</button>
+      <button 
+       style={{
+        backgroundColor: "#007BFF",
+        color: "white",
+        border: "none",
+        padding: "10px 15px",
+        borderRadius: "5px",
+        cursor: "pointer",
+      }}
+      onClick ={() => setShowAll(true)}>More</button>
       </>
     ) : (
       <>
