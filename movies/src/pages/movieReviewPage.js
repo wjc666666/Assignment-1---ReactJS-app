@@ -7,8 +7,8 @@ const MovieReviewPage = (props) => {
   let location = useLocation();
   const {movie, review} = location.state;
   
-  const[allRevies, setAllReviews] = useState([]);
-  const[showAll, setShowAll] = useStaste(false);
+  const[allReviews, setAllReviews] = useState([]);
+  const[showAll, setShowAll] = useState(false);
 
   useEffect(() => {
   if(showAll){
@@ -29,7 +29,7 @@ const MovieReviewPage = (props) => {
       {!showAll ? (
         <>
       <MovieReview review={review} />
-      <button onClick ={() => setAll(true)}>More</button>
+      <button onClick ={() => setShowAll(true)}>More</button>
       </>
     ) : (
       <>
