@@ -4,13 +4,14 @@ Name: Juncheng Wang
 
 ## Overview.
 
-This repository contains the TMDB Client, a dynamic ReactJS application that allows users to explore various movies, view details, and manage their favorites and upcoming movies. It interacts with the TMDB API to fetch and display movie data.
+This repository contains the TMDB Client, a dynamic ReactJS application that allows users to explore various movies, view details, and manage their favorites and upcoming movies. It interacts with the TMDB API to fetch and display movie data,, providing an engaging user experience with dynamic routing and interactive features.
+
 
 ### Features.
  
 
 + Trending Movies: A dynamic route (/trending) that displays the most popular or trending movies.
-+ Feature 2
++ Popular Movies: A new dynamic route (/popular) that lists the most popular movies worldwide, updated weekly.
 + Feature 3
 + etc
 + etc
@@ -59,12 +60,21 @@ There are no specific authentication requirements for this app; all routes are a
 
 During the development of this project, I researched and implemented the following independent learning:
 
-React Router v6: I researched how to implement dynamic routing and nested routes for movie details and reviews. This was essential for handling routes like /movies/:id and /reviews/:id.
+1.React Router v6:
 
-Source: React Router Documentation
-Material UI for responsive design: I implemented Material UI’s useMediaQuery hook to dynamically adjust the app’s layout between mobile and desktop views. This was used to create a mobile-friendly menu in the header and other responsive elements.
++ Implemented dynamic routing and nested routes for pages like /movies/:id and /reviews/:id.
 
-Source: Material UI - Responsive Design
-React Query for data fetching: I used React Query to fetch movie data from the TMDB API with caching, refetching, and other advanced features to improve performance and reduce unnecessary API calls.
 
-Source: React Query Documentation
+2.aterial UI for Responsive Design:
+
++ Utilized Material UI’s useMediaQuery hook for mobile-first responsive layouts.
+
+
+3.React Query for Efficient Data Fetching:
+
++ Used React Query for efficient data fetching, caching, and API call management to reduce unnecessary network traffic.
+
+
+4.Error Handling and Retry Logic:
+
++ Implemented error boundaries and retry logic for API requests, especially for fetching movie details and popular/trending data.
