@@ -116,13 +116,22 @@ export const fetchTrendingMovies = async (timeWindow = 'day') => {
     return[];
   }
 }
-export const fetchPopularMovies = async () =>{
-  try{
-    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`);
+export const fetchPopularMovies = async () => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+    );
+    console.log("API Response:", response); 
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
-    return data.result;
-  }catch(error){
-    console.error("Error fetching popular movies:", error);
-    return[];
+    console.log("API Data:", data); 
+    return data.results;
+  } catch (error) {
+    console.error("Error in fetchPopularMovies:", error); 
+    throw error;
   }
 };
