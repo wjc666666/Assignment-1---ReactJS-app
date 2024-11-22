@@ -15,7 +15,7 @@ This repository contains the TMDB Client, a dynamic ReactJS application that all
 + Show More Reviews: On the movie review page, users can click "More" to view all reviews for a movie.
 + Movie Details: Detailed information for a specific movie is available on /movies/:id
 + Movie Recommendations: A new feature that displays recommended movies based on the currently selected movie at /movies/:id/recommendations.
-
++ Movie Credits: Displays the cast and crew of a specific movie at /movies/:id/credits.
 ## Setup requirements.
 
 1.Clone the repository:
@@ -38,6 +38,7 @@ Below is a list of the TMDB endpoints used in this application:
 + Trending Movies-GET /trending/movie/week – Fetches the most popular/trending movies of the week
 + Movie Reviews-GET /movie/:id/reviews – Fetches all reviews for a movie
 + Movie Recommendations-GET /movie/:id/recommendations – Fetches recommended movies based on a selected movie
++ Movie Credits - GET /movie/:id/credits – Fetches the cast and crew details for a movie
 
 ## Routing.
 The following routes are supported in the application:
@@ -52,6 +53,7 @@ The following routes are supported in the application:
 + /upcoming – Displays upcoming movies scheduled for release.
 + /trending – Displays the trending movies for the current week.
 + /movies/:id/recommendations – Displays a list of recommended movies for the current movie.
++ /movies/:id/credits – Displays the cast and crew of a particular movie.
 
 Protected Routes:
 This app does not include authentication; all routes are accessible to the public.(Several new features are integrated e.g. pagination, third-party authentication with Firebase, or similar may add to it)
@@ -82,3 +84,7 @@ During the development of this project, I researched and implemented the followi
 5.Recommendations and Reviews Feature:
 
 + Researched TMDB API’s recommendations and reviews endpoints to display movie recommendations and all reviews dynamically.
+
+6.Movie Credits Feature:
+
++ /movies/:id/credits – Displays the cast and crew of a particular movie.
