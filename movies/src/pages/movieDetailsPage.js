@@ -5,6 +5,7 @@ import PageTemplate from "../components/templateMoviePage";
 import { getMovie } from "../api/tmdb-api";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
+import { getMovieCredits } from "../api/tmdb-api";
 
 const MoviePage = () => {
   const { id } = useParams(); 
@@ -12,8 +13,12 @@ const MoviePage = () => {
     ["movie", { id: id }],
     getMovie
   );
+  const { data: credits, isLoading: isCreditsLoading } = useQuery(
+    ["movieCredits", { id: id }],
+    getMovieCredits
+  );
 
-  if (isLoading) {
+  if (isLoading || isCreditsLoading) {
     return <Spinner />;
   }
 
@@ -27,28 +32,48 @@ const MoviePage = () => {
         <>
           <PageTemplate movie={movie}>
             <MovieDetails movie={movie} />
-            {/* Display actors with links to actor details */}
             <div style={{ marginTop: "20px" }}>
               <h3>Actors:</h3>
-              <ul>
-                {movie.cast?.map((actor) => (
-                  <li key={actor.id}>
-                    <Link to={`/actor/${actor.id}`} style={{ color: "blue", textDecoration: "underline" }}>
-                      {actor.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {credits && credits.cast && credits.cast.length > 0 ? (
+                <ul>
+                  {credits.cast.map((actor) => (
+                    <li key={actor.id}>
+                      <Link to={`/actor/${actor.id}`} style={{ color: "blue", textDecoration: "underline" }}>
+                        {actor.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No actors available for this movie.</p>
+              )}
             </div>
-            {/* added buttons for recommendations and credits */}
-            <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-              <Link to={`/movie/${movie.id}/recommendations`} style={{ textDecoration: "none" }}>
-                <button style={{ backgroundColor: "#007BFF", color: "white", border: "none", padding: "10px 15px", borderRadius: "5px", cursor: "pointer" }}>
+            <div style={{ marginTop: "20px" }}>
+              <Link to={`/movie/${movie.id}/recommendations`} style={{ textDecoration: "none", color: "white" }}>
+                <button
+                  style={{
+                    backgroundColor: "#007BFF",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 15px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
                   View Recommendations
                 </button>
               </Link>
-              <Link to={`/movie/${movie.id}/credits`} style={{ textDecoration: "none" }}>
-                <button style={{ backgroundColor: "#007BFF", color: "white", border: "none", padding: "10px 15px", borderRadius: "5px", cursor: "pointer" }}>
+              <Link to={`/movie/${movie.id}/credits`}>
+                <button
+                  style={{
+                    backgroundColor: "#007BFF",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 15px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
                   View Credits
                 </button>
               </Link>
@@ -56,7 +81,7 @@ const MoviePage = () => {
           </PageTemplate>
         </>
       ) : (
-        <p>Waiting for movie details...</p>
+        <p>Waiting for movie details</p>
       )}
     </>
   );
