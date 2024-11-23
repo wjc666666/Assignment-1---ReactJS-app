@@ -17,6 +17,7 @@ This repository contains the TMDB Client, a dynamic ReactJS application that all
 + Movie Recommendations: A new feature that displays recommended movies based on the currently selected movie at /movies/:id/recommendations.
 + Movie Credits: Displays the cast and crew of a specific movie at /movies/:id/credits.
 + Actors: Each actor page links to the movies they have appeared in, providing detailed information about the actor's filmography.
++ Pagination: The app now supports pagination for movie lists, allowing users to navigate through large collections of movies more efficiently.
 
 ## Setup requirements.
 
@@ -96,3 +97,7 @@ During the development of this project, I researched and implemented the followi
 7.Actors and Movies:
 
 + Each actor page links to the movies they have appeared in, providing detailed information about the actor's filmography.
+
+8.pagination:
+
++ Pagination: The app now supports pagination for movie lists, allowing users to navigate through large collections of movies more efficiently.
