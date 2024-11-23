@@ -22,20 +22,27 @@ const ActorPage = () => {
   return (
     <div>
       {actor ? (
-        <div>
-          <h2>{actor.name}</h2>
-          <p>{actor.biography}</p>
+        <>
+          <h1>{actor.name}</h1>
+          <img
+            src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+            alt={actor.name}
+            style={{ width: "200px", borderRadius: "10px" }}
+          />
+          <p>{actor.biography || "No biography available."}</p>
           <h3>Movies:</h3>
-          <ul>
-            {actor.movies?.map((movie) => (
-              <li key={movie.id}>
-                <Link to={`/movie/${movie.id}`} style={{ color: "blue", textDecoration: "underline" }}>
-                  {movie.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+          {actor.movie_credits?.cast?.length > 0 ? (
+            <ul>
+              {actor.movie_credits.cast.map((movie) => (
+                <li key={movie.id}>
+                  <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No movies available for this actor.</p>
+          )}
+        </>
       ) : (
         <p>Waiting for actor details...</p>
       )}

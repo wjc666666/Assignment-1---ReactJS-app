@@ -16,6 +16,8 @@ This repository contains the TMDB Client, a dynamic ReactJS application that all
 + Movie Details: Detailed information for a specific movie is available on /movies/:id
 + Movie Recommendations: A new feature that displays recommended movies based on the currently selected movie at /movies/:id/recommendations.
 + Movie Credits: Displays the cast and crew of a specific movie at /movies/:id/credits.
++ Actors: Each actor page links to the movies they have appeared in, providing detailed information about the actor's filmography.
+
 ## Setup requirements.
 
 1.Clone the repository:
@@ -39,6 +41,7 @@ Below is a list of the TMDB endpoints used in this application:
 + Movie Reviews-GET /movie/:id/reviews – Fetches all reviews for a movie
 + Movie Recommendations-GET /movie/:id/recommendations – Fetches recommended movies based on a selected movie
 + Movie Credits - GET /movie/:id/credits – Fetches the cast and crew details for a movie
++ Actor - GET /person/{id}- This endpoint retrieves detailed information about a specific actor.
 
 ## Routing.
 The following routes are supported in the application:
@@ -54,6 +57,7 @@ The following routes are supported in the application:
 + /trending – Displays the trending movies for the current week.
 + /movies/:id/recommendations – Displays a list of recommended movies for the current movie.
 + /movies/:id/credits – Displays the cast and crew of a particular movie.
++ /actor/:id - Displays the details of a specific actor and links to all the movies they have appeared in.
 
 Protected Routes:
 This app does not include authentication; all routes are accessible to the public.(Several new features are integrated e.g. pagination, third-party authentication with Firebase, or similar may add to it)
@@ -88,3 +92,7 @@ During the development of this project, I researched and implemented the followi
 6.Movie Credits Feature:
 
 + /movies/:id/credits – Displays the cast and crew of a particular movie.
+
+7.Actors and Movies:
+
++ Each actor page links to the movies they have appeared in, providing detailed information about the actor's filmography.
