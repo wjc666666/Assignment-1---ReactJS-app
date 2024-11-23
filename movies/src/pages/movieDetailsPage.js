@@ -27,39 +27,36 @@ const MoviePage = () => {
         <>
           <PageTemplate movie={movie}>
             <MovieDetails movie={movie} />
-            {/* added the linked recommendations movies*/}
+            {/* Display actors with links to actor details */}
             <div style={{ marginTop: "20px" }}>
-              <Link to={`/movie/${movie.id}/recommendations`} style={{ textDecoration: "none", color: "white" }}>
-                <button
-                  style={{
-                    backgroundColor: "#007BFF",
-                    color: "white",
-                    border: "none",
-                    padding: "10px 15px",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
+              <h3>Actors:</h3>
+              <ul>
+                {movie.cast?.map((actor) => (
+                  <li key={actor.id}>
+                    <Link to={`/actor/${actor.id}`} style={{ color: "blue", textDecoration: "underline" }}>
+                      {actor.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* added buttons for recommendations and credits */}
+            <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+              <Link to={`/movie/${movie.id}/recommendations`} style={{ textDecoration: "none" }}>
+                <button style={{ backgroundColor: "#007BFF", color: "white", border: "none", padding: "10px 15px", borderRadius: "5px", cursor: "pointer" }}>
                   View Recommendations
                 </button>
               </Link>
-              <Link to={`/movie/${movie.id}/credits`}>
-                <button
-                 style={{
-                  backgroundColor: "#007BFF",
-                  color: "white",
-                  border: "none",
-                  padding: "10px 15px",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-                >View Credits</button>
+              <Link to={`/movie/${movie.id}/credits`} style={{ textDecoration: "none" }}>
+                <button style={{ backgroundColor: "#007BFF", color: "white", border: "none", padding: "10px 15px", borderRadius: "5px", cursor: "pointer" }}>
+                  View Credits
+                </button>
               </Link>
             </div>
           </PageTemplate>
         </>
       ) : (
-        <p>Waiting for movie details</p>
+        <p>Waiting for movie details...</p>
       )}
     </>
   );

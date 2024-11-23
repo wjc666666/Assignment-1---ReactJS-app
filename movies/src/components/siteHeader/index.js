@@ -27,10 +27,8 @@ const SiteHeader = () => {
     { label: "Home", path: "/" },
     { label: "Favorites", path: "/movies/favorites" },
     { label: "Upcoming", path: "/upcoming" }, 
-    { label: "Trending", path: "/trending" },  //Trending menu option 
-    { label: "Popular", path: "/popular" },  {/* Add the Popular link */
-      
-    }
+    { label: "Trending", path: "/trending" },  
+    { label: "Popular", path: "/popular" },  
   ];
 
   const handleMenuSelect = (pageURL) => {

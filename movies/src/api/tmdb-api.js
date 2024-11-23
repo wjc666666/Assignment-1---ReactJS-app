@@ -173,3 +173,10 @@ export const getMovieCredits = ({ queryKey }) => {
       throw error;
     });
 };
+
+export const getActorDetails = async ({ queryKey }) => {
+  const { id } = queryKey[1];
+  const res = await fetch(`https://api.themoviedb.org/3/person/${id}?api_key=YOUR_API_KEY&append_to_response=movie_credits`);
+  const data = await res.json();
+  return data;
+};
