@@ -1,40 +1,53 @@
 import React, { useState } from "react";
 import { getMovies } from "../api/tmdb-api";
+import { searchMoviesByActor } from "../api/tmdb-api"; // 导入搜索演员的API
 import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
 import Spinner from '../components/spinner';
 import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
-import FilterMoviesCard from '../components/filterMoviesCard'; // Import the filter component
+import FilterMoviesCard from '../components/filterMoviesCard';
 
-const HomePage = (props) => {
-  // Define filter state at the top level of the component
+const HomePage = () => {
+  // State to manage filters
   const [filters, setFilters] = useState({
     name: "",  // Filter by movie title
-    genre: "0", // Filter by genre (default is "All")
+    genre: "0", // Filter by genre
     actor: "",  // Filter by actor name
   });
+
+  const [actorMovies, setActorMovies] = useState([]); // Store movies found by actor search
+  const [isActorSearch, setIsActorSearch] = useState(false); // Check if actor search is in progress
 
   // Fetch movie data using React Query
   const { data, error, isLoading, isError } = useQuery('discover', getMovies);
 
-  // Show a spinner while data is loading
   if (isLoading) {
     return <Spinner />;
   }
 
-  // Handle API errors
   if (isError) {
     return <h1>{error.message}</h1>;
   }
 
   const movies = data.results;
 
-  // Save favorites to localStorage (though redundant, as stated in the original code)
-  const favorites = movies.filter((m) => m.favorite);
-  localStorage.setItem('favorites', JSON.stringify(favorites));
-  const addToFavorites = (movieId) => true;
+  // Handle actor search
+  const handleActorSearch = async (actorName) => {
+    try {
+      if (actorName) {
+        const actorMovies = await searchMoviesByActor(actorName); // Call the API
+        setActorMovies(actorMovies); // Update the actor movies list
+        setIsActorSearch(true); // Indicate that actor search is active
+      } else {
+        setActorMovies([]); // Clear actor movies if actor name is empty
+        setIsActorSearch(false); // Reset actor search flag
+      }
+    } catch (error) {
+      console.error('Error during actor search:', error);
+    }
+  };
 
-  // Update the filter state when the user modifies the filter criteria
+  // Update filters when user modifies the input
   const handleUserInput = (type, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -42,43 +55,38 @@ const HomePage = (props) => {
     }));
   };
 
-  // Apply filtering to the movie list based on user input
-  const filteredMovies = movies.filter((movie) => {
-    // Check if the movie title matches the filter
+  // Apply filters to movie data
+  const filteredMovies = (isActorSearch ? actorMovies : movies).filter((movie) => {
+    // Filter by movie title
     const matchesTitle = movie.title.toLowerCase().includes(filters.name.toLowerCase());
 
-    // Check if the movie genre matches the filter (genre "0" means "All")
-    const matchesGenre =
-      filters.genre === "0" || movie.genre_ids.includes(Number(filters.genre));
+    // Filter by genre
+    const matchesGenre = filters.genre === "0" || movie.genre_ids.includes(Number(filters.genre));
 
-    // Check if the movie actor matches the filter (assumes `actors` is an array of actor names)
+    // Filter by actor (if applicable)
     const matchesActor = filters.actor
       ? movie.actors && movie.actors.some((actor) =>
           actor.toLowerCase().includes(filters.actor.toLowerCase())
         )
       : true;
 
-    // Only include movies that match all filters
     return matchesTitle && matchesGenre && matchesActor;
   });
 
   return (
     <>
-      {/* Render the filter component and pass down filter state and handler */}
       <FilterMoviesCard
         titleFilter={filters.name}
         genreFilter={filters.genre}
         actorFilter={filters.actor}
         onUserInput={handleUserInput}
+        onActorSearch={handleActorSearch} // Pass actor search handler to child
       />
 
-      {/* Render the movie list with the filtered movie data */}
       <PageTemplate
         title="Discover Movies"
-        movies={filteredMovies} // Pass filtered movies to the template
-        action={(movie) => {
-          return <AddToFavoritesIcon movie={movie} />;
-        }}
+        movies={filteredMovies} // Pass filtered movies
+        action={(movie) => <AddToFavoritesIcon movie={movie} />}
       />
     </>
   );

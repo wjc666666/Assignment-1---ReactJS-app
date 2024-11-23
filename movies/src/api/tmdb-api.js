@@ -184,3 +184,24 @@ export const getActorDetails = async ({ queryKey }) => {
   const data = await res.json();
   return data;
 };
+
+export const searchMoviesByActor = async (actorName) => {
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/person?api_key=${process.env.REACT_APP_TMDB_KEY}&query=${encodeURIComponent(actorName)}`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch movies by actor');
+    }
+
+    const data = await response.json();
+
+    // Extract all movies from the actor's `known_for` or `movie_credits`
+    const movies = data.results[0]?.known_for || [];
+    return movies;
+  } catch (error) {
+    console.error('Error fetching movies by actor:', error);
+    return [];
+  }
+};
