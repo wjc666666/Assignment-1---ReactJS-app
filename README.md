@@ -18,6 +18,7 @@ This repository contains the TMDB Client, a dynamic ReactJS application that all
 + Movie Credits: Displays the cast and crew of a specific movie at /movies/:id/credits.
 + Actors: Each actor page links to the movies they have appeared in, providing detailed information about the actor's filmography.
 + Pagination: The app now supports pagination for movie lists, allowing users to navigate through large collections of movies more efficiently.
++ Sorting and searching features are added : Added sorting options for popularity, release date, and rating, along with a combined search feature for titles and actors.
 
 ## Setup requirements.
 
@@ -43,6 +44,8 @@ Below is a list of the TMDB endpoints used in this application:
 + Movie Recommendations-GET /movie/:id/recommendations – Fetches recommended movies based on a selected movie
 + Movie Credits - GET /movie/:id/credits – Fetches the cast and crew details for a movie
 + Actor - GET /person/{id}- This endpoint retrieves detailed information about a specific actor.
++ Search Movies- GET /search/movie – Searches for movies by title
++ Search Actors - GET /search/person – Searches for movies by actor
 
 ## Routing.
 The following routes are supported in the application:
