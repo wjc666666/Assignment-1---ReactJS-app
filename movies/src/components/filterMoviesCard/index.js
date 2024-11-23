@@ -9,16 +9,16 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import img from '../images/pexels-dziana-hasanbekava-5480827.jpg';
+import img from "../images/pexels-dziana-hasanbekava-5480827.jpg";
 import { getGenres } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../spinner';
+import Spinner from "../spinner";
 
 // Styles for form controls
 const formControl = {
   margin: 1,
   minWidth: "90%",
-  backgroundColor: "rgb(255, 255, 255)"
+  backgroundColor: "rgb(255, 255, 255)",
 };
 
 // FilterMoviesCard Component
@@ -43,20 +43,14 @@ export default function FilterMoviesCard(props) {
     props.onUserInput(type, value);
   };
 
-  const handleTextChange = (e) => {
+  const handleSearchChange = (e) => {
     const value = e.target.value;
-    if (props.onActorSearch) {
-      props.onActorSearch(value); // Trigger actor search when text changes
-    }
-    handleChange(e, "name", value);
+    props.onSearch(value);
+    handleChange(e, "query", value);
   };
 
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
-  };
-
-  const handleActorChange = (e) => {
-    handleChange(e, "actor", e.target.value);
   };
 
   return (
@@ -70,11 +64,11 @@ export default function FilterMoviesCard(props) {
         <TextField
           sx={{ ...formControl }}
           id="filled-search"
-          label="Search by title"
+          label="Search by title or actor"
           type="search"
           variant="filled"
-          value={props.titleFilter}
-          onChange={handleTextChange}
+          value={props.queryFilter || ""}
+          onChange={handleSearchChange}
         />
 
         <FormControl sx={{ ...formControl }}>
@@ -82,7 +76,7 @@ export default function FilterMoviesCard(props) {
           <Select
             labelId="genre-label"
             id="genre-select"
-            value={props.genreFilter}
+            value={props.genreFilter || "0"}
             onChange={handleGenreChange}
           >
             {genres.map((genre) => (
@@ -92,27 +86,8 @@ export default function FilterMoviesCard(props) {
             ))}
           </Select>
         </FormControl>
-
-        <TextField
-          sx={{ ...formControl }}
-          id="filled-search-actor"
-          label="Search by actor"
-          type="search"
-          variant="filled"
-          value={props.actorFilter}
-          onChange={handleActorChange}
-        />
       </CardContent>
-
       <CardMedia sx={{ height: 300 }} image={img} title="Filter" />
-
-      <CardContent>
-        <Typography variant="h5" component="h1">
-          <SearchIcon fontSize="large" />
-          Filter the movies.
-          <br />
-        </Typography>
-      </CardContent>
     </Card>
   );
 }

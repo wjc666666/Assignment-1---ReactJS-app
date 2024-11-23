@@ -1,25 +1,18 @@
 import React, { useState } from "react";
 import { getMovies } from "../api/tmdb-api";
-import { searchMoviesByActor } from "../api/tmdb-api"; // 导入搜索演员的API
-import PageTemplate from '../components/templateMovieListPage';
-import { useQuery } from 'react-query';
-import Spinner from '../components/spinner';
-import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
-import FilterMoviesCard from '../components/filterMoviesCard';
+import PageTemplate from "../components/templateMovieListPage";
+import { useQuery } from "react-query";
+import Spinner from "../components/spinner";
+import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
+import FilterMoviesCard from "../components/filterMoviesCard";
+import { searchMoviesByActorOrTitle } from "../api/tmdb-api";
 
 const HomePage = () => {
-  // State to manage filters
-  const [filters, setFilters] = useState({
-    name: "",  // Filter by movie title
-    genre: "0", // Filter by genre
-    actor: "",  // Filter by actor name
-  });
+  const [filters, setFilters] = useState({ query: "", genre: "0" });
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
 
-  const [actorMovies, setActorMovies] = useState([]); // Store movies found by actor search
-  const [isActorSearch, setIsActorSearch] = useState(false); // Check if actor search is in progress
-
-  // Fetch movie data using React Query
-  const { data, error, isLoading, isError } = useQuery('discover', getMovies);
+  const { data, error, isLoading, isError } = useQuery("discover", getMovies);
 
   if (isLoading) {
     return <Spinner />;
@@ -29,63 +22,45 @@ const HomePage = () => {
     return <h1>{error.message}</h1>;
   }
 
-  const movies = data.results;
+  const movies = data?.results || [];
 
-  // Handle actor search
-  const handleActorSearch = async (actorName) => {
+  const addToFavorites = (movieId) => true;
+
+  const handleUserInput = (type, value) => {
+    setFilters((prevFilters) => ({ ...prevFilters, [type]: value }));
+  };
+
+  const handleSearch = async (query) => {
     try {
-      if (actorName) {
-        const actorMovies = await searchMoviesByActor(actorName); // Call the API
-        setActorMovies(actorMovies); // Update the actor movies list
-        setIsActorSearch(true); // Indicate that actor search is active
-      } else {
-        setActorMovies([]); // Clear actor movies if actor name is empty
-        setIsActorSearch(false); // Reset actor search flag
-      }
+      const movies = await searchMoviesByActorOrTitle(query);
+      setSearchResults(movies);
+      setIsSearch(true);
     } catch (error) {
-      console.error('Error during actor search:', error);
+      console.error("Error during search:", error);
     }
   };
 
-  // Update filters when user modifies the input
-  const handleUserInput = (type, value) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [type]: value,
-    }));
-  };
-
-  // Apply filters to movie data
-  const filteredMovies = (isActorSearch ? actorMovies : movies).filter((movie) => {
-    // Filter by movie title
-    const matchesTitle = movie.title.toLowerCase().includes(filters.name.toLowerCase());
-
-    // Filter by genre
-    const matchesGenre = filters.genre === "0" || movie.genre_ids.includes(Number(filters.genre));
-
-    // Filter by actor (if applicable)
-    const matchesActor = filters.actor
-      ? movie.actors && movie.actors.some((actor) =>
-          actor.toLowerCase().includes(filters.actor.toLowerCase())
-        )
-      : true;
-
-    return matchesTitle && matchesGenre && matchesActor;
+  const filteredMovies = movies.filter((movie) => {
+    const keywords = filters.query?.toLowerCase().split(" ") || [];
+    const matchesTitle = keywords.every((kw) =>
+      (movie.title || "").toLowerCase().includes(kw)
+    );
+    const matchesGenre =
+      filters.genre === "0" || movie.genre_ids?.includes(Number(filters.genre));
+    return matchesTitle && matchesGenre;
   });
 
   return (
     <>
       <FilterMoviesCard
-        titleFilter={filters.name}
+        queryFilter={filters.query}
         genreFilter={filters.genre}
-        actorFilter={filters.actor}
         onUserInput={handleUserInput}
-        onActorSearch={handleActorSearch} // Pass actor search handler to child
+        onSearch={handleSearch}
       />
-
       <PageTemplate
         title="Discover Movies"
-        movies={filteredMovies} // Pass filtered movies
+        movies={isSearch ? searchResults : filteredMovies}
         action={(movie) => <AddToFavoritesIcon movie={movie} />}
       />
     </>

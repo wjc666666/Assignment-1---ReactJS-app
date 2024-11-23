@@ -185,23 +185,38 @@ export const getActorDetails = async ({ queryKey }) => {
   return data;
 };
 
-export const searchMoviesByActor = async (actorName) => {
+export const searchMoviesByActorOrTitle = async (query) => {
   try {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/person?api_key=${process.env.REACT_APP_TMDB_KEY}&query=${encodeURIComponent(actorName)}`
+    const movieResponse = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&query=${encodeURIComponent(query)}`
     );
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch movies by actor');
+    if (!movieResponse.ok) {
+      throw new Error("Failed to fetch movies by title");
     }
 
-    const data = await response.json();
+    const movieData = await movieResponse.json();
+    const moviesByTitle = movieData.results || [];
 
-    // Extract all movies from the actor's `known_for` or `movie_credits`
-    const movies = data.results[0]?.known_for || [];
-    return movies;
+    const actorResponse = await fetch(
+      `https://api.themoviedb.org/3/search/person?api_key=${process.env.REACT_APP_TMDB_KEY}&query=${encodeURIComponent(query)}`
+    );
+
+    if (!actorResponse.ok) {
+      throw new Error("Failed to fetch movies by actor");
+    }
+
+    const actorData = await actorResponse.json();
+    const moviesByActor = actorData.results[0]?.known_for || [];
+
+    const combinedMovies = [...moviesByTitle, ...moviesByActor];
+    const uniqueMovies = Array.from(new Set(combinedMovies.map((a) => a.id))).map(
+      (id) => combinedMovies.find((a) => a.id === id)
+    );
+
+    return uniqueMovies;
   } catch (error) {
-    console.error('Error fetching movies by actor:', error);
+    console.error("Error fetching movies by actor or title:", error);
     return [];
   }
 };
