@@ -15,9 +15,11 @@ export const getMovies = () => {
 };
   
 export const getMovie = (args) => {
-  const [, { page }] = args.queryKey;
+  //console.log(args)
+  const [, idPart] = args.queryKey;
+  const { id } = idPart;
   return fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_KEY}&page=${page}`
+    `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}`
   ).then((response) => {
     if (!response.ok) {
       return response.json().then((error) => {
@@ -27,9 +29,10 @@ export const getMovie = (args) => {
     return response.json();
   })
   .catch((error) => {
-    throw error;
-  });
+    throw error
+ });
 };
+  
   export const getGenres = () => {
     return fetch(
       "https://api.themoviedb.org/3/genre/movie/list?api_key=" +
