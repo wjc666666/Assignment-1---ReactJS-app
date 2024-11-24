@@ -3,16 +3,17 @@ import { getMovies } from "../api/tmdb-api";
 import PageTemplate from "../components/templateMovieListPage";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
-import AddToFavoritesIcon from "../components/cardIcons/addToFavorites";
-import FilterMoviesCard from "../components/filterMoviesCard";
-import { searchMoviesByActorOrTitle } from "../api/tmdb-api";
+import Pagination from "../components/Pagination/Pagination";
+
 
 const HomePage = () => {
-  const [filters, setFilters] = useState({ query: "", genre: "0" });
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, error, isLoading, isError } = useQuery("discover", getMovies);
+  // Fetch movies for the current page
+  const { data, error, isLoading, isError } = useQuery(
+    ["discover", currentPage],
+    () => getMovies(currentPage)
+  );
 
   if (isLoading) {
     return <Spinner />;
@@ -23,45 +24,23 @@ const HomePage = () => {
   }
 
   const movies = data?.results || [];
+  const totalPages = data?.total_pages || 1;
 
-  const addToFavorites = (movieId) => true;
-
-  const handleUserInput = (type, value) => {
-    setFilters((prevFilters) => ({ ...prevFilters, [type]: value }));
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
-
-  const handleSearch = async (query) => {
-    try {
-      const movies = await searchMoviesByActorOrTitle(query);
-      setSearchResults(movies);
-      setIsSearch(true);
-    } catch (error) {
-      console.error("Error during search:", error);
-    }
-  };
-
-  const filteredMovies = movies.filter((movie) => {
-    const keywords = filters.query?.toLowerCase().split(" ") || [];
-    const matchesTitle = keywords.every((kw) =>
-      (movie.title || "").toLowerCase().includes(kw)
-    );
-    const matchesGenre =
-      filters.genre === "0" || movie.genre_ids?.includes(Number(filters.genre));
-    return matchesTitle && matchesGenre;
-  });
 
   return (
     <>
-      <FilterMoviesCard
-        queryFilter={filters.query}
-        genreFilter={filters.genre}
-        onUserInput={handleUserInput}
-        onSearch={handleSearch}
-      />
       <PageTemplate
         title="Discover Movies"
-        movies={isSearch ? searchResults : filteredMovies}
-        action={(movie) => <AddToFavoritesIcon movie={movie} />}
+        movies={movies}
+        action={(movie) => <div>Add to Favorites Button Placeholder</div>}
+      />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
     </>
   );
